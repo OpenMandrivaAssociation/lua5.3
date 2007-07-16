@@ -7,7 +7,7 @@
 Summary:	Lua is a powerful, light-weight programming language
 Name:		lua
 Version:	5.1.2
-Release:	%mkrel 2
+Release:	%mkrel 3
 License:	MIT
 URL:		http://www.lua.org/
 Group:		Development/Other
@@ -80,7 +80,10 @@ This package contains the headers and development files for lua.
 Summary:	Lua is a powerful, light-weight programming language
 Group:		Development/Other
 Provides:	lua-devel-static = %{version}-%{release}
+Provides:	lua-static-devel = %{version}-%{release}
 Requires:	%{develname} = %{version}-%{release}
+Obsoletes:	%{libname}-static-devel
+Obsoletes:	%{libname}-devel-static
 
 %description -n	%{staticname}
 Lua is a programming language originally designed for extending applications,
