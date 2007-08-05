@@ -7,7 +7,7 @@
 Summary:	Lua is a powerful, light-weight programming language
 Name:		lua
 Version:	5.1.2
-Release:	%mkrel 3
+Release:	%mkrel 4
 License:	MIT
 URL:		http://www.lua.org/
 Group:		Development/Other
@@ -114,7 +114,8 @@ install -d %{buildroot}%{_libdir}/lua/%{major}/
 install -d %{buildroot}%{_datadir}/lua/%{major}/
 install -m 644 test/*.lua %{buildroot}%{_datadir}/lua/%{major}/
 
-install -m 755 src/liblua.so* %{buildroot}%{_libdir}
+install -m 755 src/liblua.so.%{major}* %{buildroot}%{_libdir}
+ln -s liblua.so.%{major} %{buildroot}%{_libdir}/liblua.so
 
 install -d -m 755 %{buildroot}%{_libdir}/pkgconfig/
 install -m 644 etc/lua.pc %{buildroot}%{_libdir}/pkgconfig/
