@@ -18,7 +18,6 @@ Provides:	lua%{major}
 # Obsoletes:	lua5.1
 BuildRequires:	libreadline-devel
 BuildRequires:	ncurses-devel
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 Lua is a programming language originally designed for extending applications, 
