@@ -1,4 +1,4 @@
-%define major   5.1
+%define major 5.1
 %define libname %mklibname %{name} %{major}
 %define develname %mklibname %{name} -d
 %define staticname %mklibname %{name} -d -s
@@ -47,11 +47,8 @@ prototyping. Lua is implemented as a small library of C functions, written in
 ANSI C, and compiles unmodified in all known platforms. The implementation
 goals are simplicity, efficiency, portability, and low embedding cost.
 
-This package contains the headers and development files for lua.
-
-
 %package -n %{develname}
-Summary:	Lua is a powerful, light-weight programming language
+Summary:	Headers and development files for Lua
 Group:		Development/Other
 Requires:	%{libname} = %{version}
 Provides:	liblua-devel = %{version}-%{release}
@@ -63,21 +60,10 @@ Obsoletes:	%{_lib}lua4-devel
 Obsoletes:	%{libname}-devel
 
 %description -n %{develname}
-Lua is a programming language originally designed for extending applications,
-but also frequently used as a general-purpose, stand-alone language. Lua
-combines simple procedural syntax (similar to Pascal) with powerful data
-description constructs based on associative arrays and extensible semantics.
-Lua is dynamically typed, interpreted from bytecodes, and has automatic memory
-management, making it ideal for configuration, scripting, and rapid
-prototyping. Lua is implemented as a small library of C functions, written in
-ANSI C, and compiles unmodified in all known platforms. The implementation
-goals are simplicity, efficiency, portability, and low embedding cost.
-
-This package contains the headers and development files for lua.
-
+This package contains the headers and development files for Lua.
 
 %package -n	%{staticname}
-Summary:	Lua is a powerful, light-weight programming language
+Summary:	Static development files for Lua
 Group:		Development/Other
 Provides:	lua-devel-static = %{version}-%{release}
 Provides:	lua-static-devel = %{version}-%{release}
@@ -86,17 +72,7 @@ Obsoletes:	%{libname}-static-devel
 Obsoletes:	%{libname}-devel-static
 
 %description -n	%{staticname}
-Lua is a programming language originally designed for extending applications,
-but also frequently used as a general-purpose, stand-alone language. Lua
-combines simple procedural syntax (similar to Pascal) with powerful data
-description constructs based on associative arrays and extensible semantics.
-Lua is dynamically typed, interpreted from bytecodes, and has automatic memory
-management, making it ideal for configuration, scripting, and rapid
-prototyping. Lua is implemented as a small library of C functions, written in
-ANSI C, and compiles unmodified in all known platforms. The implementation
-goals are simplicity, efficiency, portability, and low embedding cost.
-
-This package contains the headers and development files for lua.
+This package contains the static development files for Lua.
 
 %prep
 %setup -q
@@ -104,7 +80,9 @@ This package contains the headers and development files for lua.
 
 %build
 %make linux CFLAGS="%{optflags} -fPIC -DLUA_USE_LINUX"
-sed -i -e "s£/usr/local£%_prefix£" etc/lua.pc
+
+sed -i -e "s#/usr/local#%{_prefix}#" etc/lua.pc
+sed -i -e 's/-lreadline -lncurses //g' etc/lua.pc
 
 %install
 rm -rf %{buildroot}
