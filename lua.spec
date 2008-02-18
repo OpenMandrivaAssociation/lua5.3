@@ -4,7 +4,7 @@
 %define staticname %mklibname %{name} -d -s
 %define alt_priority %(echo %{major} | sed -e 's/[^0-9]//g')
 
-Summary:	Lua is a powerful, light-weight programming language
+Summary:	Powerful, light-weight programming language
 Name:		lua
 Version:	5.1.3
 Release:	%mkrel 1
@@ -33,7 +33,7 @@ goals are simplicity, efficiency, portability, and low embedding cost.
 
 
 %package -n %{libname}
-Summary:	Lua is a powerful, light-weight programming language
+Summary:	Powerful, light-weight programming language
 Group:		Development/Other
 
 %description -n %{libname}
