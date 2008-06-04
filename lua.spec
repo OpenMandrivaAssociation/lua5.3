@@ -7,7 +7,7 @@
 Summary:	Powerful, light-weight programming language
 Name:		lua
 Version:	5.1.3
-Release:	%mkrel 2
+Release:	%mkrel 3
 License:	MIT
 URL:		http://www.lua.org/
 Group:		Development/Other
@@ -30,7 +30,6 @@ management, making it ideal for configuration, scripting, and rapid
 prototyping. Lua is implemented as a small library of C functions, written in 
 ANSI C, and compiles unmodified in all known platforms. The implementation
 goals are simplicity, efficiency, portability, and low embedding cost.
-
 
 %package -n %{libname}
 Summary:	Powerful, light-weight programming language
@@ -80,7 +79,6 @@ This package contains the static development files for Lua.
 
 %build
 %make linux CFLAGS="%{optflags} -fPIC -DLUA_USE_LINUX"
-
 sed -i -e "s#/usr/local#%{_prefix}#" etc/lua.pc
 sed -i -e 's/-lreadline -lncurses //g' etc/lua.pc
 
