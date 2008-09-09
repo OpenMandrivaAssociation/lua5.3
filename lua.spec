@@ -6,15 +6,15 @@
 
 Summary:	Powerful, light-weight programming language
 Name:		lua
-Version:	5.1.3
-Release:	%mkrel 5
+Version:	5.1.4
+Release:	%mkrel 1
 License:	MIT
 URL:		http://www.lua.org/
 Group:		Development/Other
-Source0:	http://www.lua.org/ftp/%{name}-%{version}.tar.bz2
+Source0:	http://www.lua.org/ftp/%{name}-%{version}.tar.gz
 Patch0:		lua-5.1-dynlib.patch
 # (tpg) http://www.lua.org/ftp/patch-lua-5.1.3
-Patch1:		patch-lua-5.1.3.patch
+#Patch1:		patch-lua-5.1.3.patch
 Provides:	lua%{major}
 # why obsoleting lua5.1 ?
 # Obsoletes:	lua5.1
@@ -78,9 +78,9 @@ This package contains the static development files for Lua.
 %prep
 %setup -q
 %patch0 -p0 -b .dynlib
-pushd src
-%patch1 -p0 -b .upstream
-popd
+#pushd src
+#%patch1 -p0 -b .upstream
+#popd
 
 %build
 %make linux CFLAGS="%{optflags} -fPIC -DLUA_USE_LINUX"
