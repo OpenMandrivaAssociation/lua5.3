@@ -7,7 +7,7 @@
 Summary:	Powerful, light-weight programming language
 Name:		lua
 Version:	5.1.4
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	MIT
 URL:		http://www.lua.org/
 Group:		Development/Other
@@ -51,8 +51,8 @@ goals are simplicity, efficiency, portability, and low embedding cost.
 %package -n %{develname}
 Summary:	Headers and development files for Lua
 Group:		Development/Other
-Requires:	%{libname} = %{version}
-Provides:	liblua-devel = %{version}-%{release}
+Requires:	%{libname} = %{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 Provides:	liblua%{major}-devel = %{version}-%{release}
 Provides:	lua-devel = %{version}-%{release}
 Provides:	lua%{major}-devel = %{version}-%{release}
