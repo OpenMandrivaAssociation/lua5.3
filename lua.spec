@@ -13,22 +13,21 @@ URL:		http://www.lua.org/
 Group:		Development/Other
 Source0:	http://www.lua.org/ftp/%{name}-%{version}.tar.gz
 Patch0:		lua-5.1-dynlib.patch
-Patch1:		lua-5.1.4-dont-pass-libdir-to-pkgconfig-libs.patch
+Patch1:		lua-5.1-pkgconfig_libdir.patch
+Patch2:		lua-5.1-modules_path.patch
 Provides:	lua%{major}
-# why obsoleting lua5.1 ?
-# Obsoletes:	lua5.1
 BuildRequires:	libreadline-devel
 BuildRequires:	ncurses-devel
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
-Lua is a programming language originally designed for extending applications, 
+Lua is a programming language originally designed for extending applications,
 but also frequently used as a general-purpose, stand-alone language. Lua
-combines simple procedural syntax (similar to Pascal) with powerful data 
+combines simple procedural syntax (similar to Pascal) with powerful data
 description constructs based on associative arrays and extensible semantics.
 Lua is dynamically typed, interpreted from bytecodes, and has automatic memory
 management, making it ideal for configuration, scripting, and rapid
-prototyping. Lua is implemented as a small library of C functions, written in 
+prototyping. Lua is implemented as a small library of C functions, written in
 ANSI C, and compiles unmodified in all known platforms. The implementation
 goals are simplicity, efficiency, portability, and low embedding cost.
 
@@ -76,8 +75,16 @@ This package contains the static development files for Lua.
 
 %prep
 %setup -q
-%patch0 -p0 -b .dynlib
-%patch1 -p1 -b .pkgconfig~
+%patch0 -p1 -b .dynlib
+%patch1 -p1 -b .pkgconfig
+%patch2 -p1 -b .modules
+
+sed -i -e "s|/usr/local|%{_prefix}|g" Makefile
+sed -i -e "s|/lib|/%{_lib}|g" Makefile
+sed -i -e "s|/usr/local|%{_prefix}|g" src/luaconf.h
+sed -i -e "s|/lib|/%{_lib}|g" src/luaconf.h
+sed -i -e "s|/man/man1|/share/man/man1|g" Makefile
+sed -i -e "s|\$(V)|%{major}|g" src/Makefile
 
 %build
 %make linux CFLAGS="%{optflags} -fPIC -DLUA_USE_LINUX"
