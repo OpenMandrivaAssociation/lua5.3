@@ -51,7 +51,6 @@ Summary:	Headers and development files for Lua
 Group:		Development/Other
 Requires:	%{libname} = %{version}-%{release}
 Requires:	%{name} = %{version}-%{release}
-Provides:	liblua%{major}-devel = %{version}-%{release}
 Provides:	lua-devel = %{version}-%{release}
 Provides:	lua%{major}-devel = %{version}-%{release}
 Obsoletes: 	%{_lib}lua5-devel < %{version}
