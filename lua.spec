@@ -18,6 +18,7 @@ Patch2:		lua-5.1-modules_path.patch
 Provides:	lua%{major}
 BuildRequires:	libreadline-devel
 BuildRequires:	ncurses-devel
+Provides:	/usr/bin/lua
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
