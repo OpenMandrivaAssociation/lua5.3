@@ -1,13 +1,13 @@
-%define major 5.1
-%define libname %mklibname %{name} %{major}
-%define develname %mklibname %{name} -d
-%define staticname %mklibname %{name} -d -s
-%define alt_priority %(echo %{major} | sed -e 's/[^0-9]//g')
+%define	major	5.1
+%define	libname	%mklibname %{name} %{major}
+%define	devname	%mklibname %{name} -d
+%define	static	%mklibname %{name} -d -s
+%define	alt_priority %(echo %{major} | sed -e 's/[^0-9]//g')
 
 Summary:	Powerful, light-weight programming language
 Name:		lua
 Version:	5.1.4
-Release:	%mkrel 11
+Release:	12
 License:	MIT
 URL:		http://www.lua.org/
 Group:		Development/Other
@@ -19,7 +19,6 @@ Provides:	lua%{major}
 BuildRequires:	libreadline-devel
 BuildRequires:	ncurses-devel
 Provides:	/usr/bin/lua
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 Lua is a programming language originally designed for extending applications,
@@ -32,11 +31,11 @@ prototyping. Lua is implemented as a small library of C functions, written in
 ANSI C, and compiles unmodified in all known platforms. The implementation
 goals are simplicity, efficiency, portability, and low embedding cost.
 
-%package -n %{libname}
+%package -n	%{libname}
 Summary:	Powerful, light-weight programming language
 Group:		Development/Other
 
-%description -n %{libname}
+%description -n	%{libname}
 Lua is a programming language originally designed for extending applications,
 but also frequently used as a general-purpose, stand-alone language. Lua
 combines simple procedural syntax (similar to Pascal) with powerful data
@@ -47,7 +46,7 @@ prototyping. Lua is implemented as a small library of C functions, written in
 ANSI C, and compiles unmodified in all known platforms. The implementation
 goals are simplicity, efficiency, portability, and low embedding cost.
 
-%package -n %{develname}
+%package -n	%{devname}
 Summary:	Headers and development files for Lua
 Group:		Development/Other
 Requires:	%{libname} = %{version}-%{release}
@@ -59,19 +58,19 @@ Obsoletes: 	%{_lib}lua5-devel < %{version}
 Obsoletes:	%{_lib}lua4-devel
 Obsoletes:	%{libname}-devel
 
-%description -n %{develname}
+%description -n	%{devname}
 This package contains the headers and development files for Lua.
 
-%package -n	%{staticname}
+%package -n	%{static}
 Summary:	Static development files for Lua
 Group:		Development/Other
 Provides:	lua-devel-static = %{version}-%{release}
 Provides:	lua-static-devel = %{version}-%{release}
-Requires:	%{develname} = %{version}-%{release}
+Requires:	%{devname} = %{version}-%{release}
 Obsoletes:	%{libname}-static-devel
 Obsoletes:	%{libname}-devel-static
 
-%description -n	%{staticname}
+%description -n	%{static}
 This package contains the static development files for Lua.
 
 %prep
@@ -93,8 +92,6 @@ sed -i -e "s#/usr/local#%{_prefix}#" etc/lua.pc
 sed -i -e 's/-lreadline -lncurses //g' etc/lua.pc
 
 %install
-rm -rf %{buildroot}
-
 %makeinstall_std INSTALL_TOP=%{buildroot}%{_prefix} INSTALL_LIB=%{buildroot}%{_libdir} INSTALL_MAN=%{buildroot}%{_mandir}/man1
 install -d %{buildroot}%{_libdir}/lua/%{major}/
 install -d %{buildroot}%{_datadir}/lua/%{major}/
@@ -110,25 +107,13 @@ install -m 644 etc/lua.pc %{buildroot}%{_libdir}/pkgconfig/
 mv %{buildroot}%{_bindir}/lua %{buildroot}%{_bindir}/lua%{major}
 mv %{buildroot}%{_bindir}/luac %{buildroot}%{_bindir}/luac%{major}
 
-%clean
-rm -rf %{buildroot}
-
 %post
 /usr/sbin/update-alternatives --install %{_bindir}/lua lua %{_bindir}/lua%{major} %{alt_priority} --slave %{_bindir}/luac luac %{_bindir}/luac%{major}
-
-%if %mdkversion < 200900
-%post -n %{libname} -p /sbin/ldconfig
-%endif
 
 %postun
 [[ -f %{_bindir}/lua%{major} ]] || /usr/sbin/update-alternatives --remove lua %{_bindir}/lua%{major}
 
-%if %mdkversion < 200900
-%postun -n %{libname} -p /sbin/ldconfig
-%endif
-
 %files
-%defattr (-,root,root)
 %doc doc/*.html doc/*.gif
 %doc COPYRIGHT HISTORY INSTALL README
 %{_bindir}/*
@@ -137,15 +122,12 @@ rm -rf %{buildroot}
 %{_datadir}/lua/%{major}/*.lua
 
 %files -n %{libname}
-%defattr (-,root,root)
 %{_libdir}/liblua.so.%{major}*
 
-%files -n %{develname}
-%defattr (-,root,root)
+%files -n %{devname}
 %{_includedir}/*
 %{_libdir}/pkgconfig/*
 %{_libdir}/liblua.so
 
-%files -n %{staticname}
-%defattr (-,root,root)
+%files -n %{static}
 %{_libdir}/*.a
