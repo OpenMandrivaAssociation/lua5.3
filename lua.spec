@@ -16,8 +16,8 @@ Patch0:		lua-5.1-dynlib.patch
 Patch1:		lua-5.1-pkgconfig_libdir.patch
 Patch2:		lua-5.1-modules_path.patch
 Provides:	lua%{major}
-BuildRequires:	libreadline-devel
-BuildRequires:	ncurses-devel
+BuildRequires:	readline-devel
+BuildRequires:	pkgconfig(ncurses)
 Provides:	/usr/bin/lua
 
 %description
