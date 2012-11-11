@@ -1,0 +1,19 @@
+diff -p -up lua-5.1.4/etc/lua.pc.pkgconfig lua-5.1.4/etc/lua.pc
+--- lua-5.1.4/etc/lua.pc.pkgconfig	2008-08-08 08:46:11.000000000 -0400
++++ lua-5.1.4/etc/lua.pc	2009-01-22 14:37:42.916872594 -0500
+@@ -18,14 +18,13 @@ INSTALL_CMOD= ${prefix}/lib/lua/${V}
+ 
+ # canonical vars
+ exec_prefix=${prefix}
+-libdir=${exec_prefix}/lib
+ includedir=${prefix}/include
+ 
+ Name: Lua
+ Description: An Extensible Extension Language
+ Version: ${R}
+ Requires: 
+-Libs: -L${libdir} -llua -lm
++Libs: -llua -lm
+ Cflags: -I${includedir}
+ 
+ # (end of lua.pc)
