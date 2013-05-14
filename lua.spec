@@ -82,13 +82,11 @@ sed -i -e "s|/man/man1|/share/man/man1|g" Makefile
 sed -i -e "s|\$(V)|%{major}|g" src/Makefile
 
 %build
-%make linux CFLAGS="%{optflags} -fPIC -DLUA_USE_LINUX"
+%make linux CFLAGS="%{optflags} -fPIC -DLUA_USE_LINUX" CC="%__cc" LD="%__ld"
 sed -i -e "s#/usr/local#%{_prefix}#" etc/lua.pc
 sed -i -e 's/-lreadline -lncurses //g' etc/lua.pc
 
 %install
-rm -rf %{buildroot}
-
 %makeinstall_std INSTALL_TOP=%{buildroot}%{_prefix} INSTALL_LIB=%{buildroot}%{_libdir} INSTALL_MAN=%{buildroot}%{_mandir}/man1
 install -d %{buildroot}%{_libdir}/lua/%{major}/
 install -d %{buildroot}%{_datadir}/lua/%{major}/

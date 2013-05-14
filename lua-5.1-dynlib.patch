@@ -24,7 +24,7 @@ index e0d4c9f..0f3d3d4 100644
  a:	$(ALL_A)
  
 +$(LUA_SO): $(CORE_O) $(LIB_O)
-+	gcc -Wl,-soname=liblua.so.$(V) -shared -o $@ $(MYLDFLAGS) $? $(LIBS) $(LUA_O)
++	$(CC) -Wl,-soname=liblua.so.$(V) -shared -o $@ $(MYLDFLAGS) $? $(LIBS) $(LUA_O)
 +	rm -f liblua.so
 +	ln -s $@ liblua.so
 +
