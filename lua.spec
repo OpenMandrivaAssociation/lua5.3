@@ -3,6 +3,7 @@
 %define devname %mklibname %{name} -d
 %define staticname %mklibname %{name} -d -s
 %define alt_priority %(echo %{major} | sed -e 's/[^0-9]//g')
+%define debug_package %nil
 
 Summary:	Powerful, light-weight programming language
 Name:		lua
