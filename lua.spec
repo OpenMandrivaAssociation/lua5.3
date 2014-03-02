@@ -1,24 +1,23 @@
-%define major 5.1
+%define major 5.2
 %define libname %mklibname %{name} %{major}
-%define devname %mklibname %{name} -d
+%define develname %mklibname %{name} -d
 %define staticname %mklibname %{name} -d -s
 %define alt_priority %(echo %{major} | sed -e 's/[^0-9]//g')
-%define debug_package %nil
 
 Summary:	Powerful, light-weight programming language
 Name:		lua
-Version:	5.1.5
-Release:	9
+Version:	5.2.3
+Release:	1
 License:	MIT
 Group:		Development/Other
-Url:		http://www.lua.org/
+URL:		http://www.lua.org/
 Source0:	http://www.lua.org/ftp/%{name}-%{version}.tar.gz
-Patch0:		lua-5.1-dynlib.patch
-Patch1:		lua-5.1-pkgconfig_libdir.patch
-Patch2:		lua-5.1-modules_path.patch
+Source1:	lua.pc
+Patch0:		lua-5.2.1-dynlib.patch
+Patch2:		lua-5.2.0-modules_path.patch
 Provides:	lua%{major}
 BuildRequires:	readline-devel
-BuildRequires:	pkgconfig(ncurses)
+BuildRequires:	ncurses-devel
 
 %description
 Lua is a programming language originally designed for extending applications,
@@ -46,29 +45,36 @@ prototyping. Lua is implemented as a small library of C functions, written in
 ANSI C, and compiles unmodified in all known platforms. The implementation
 goals are simplicity, efficiency, portability, and low embedding cost.
 
-%package -n %{devname}
+%package -n %{develname}
 Summary:	Headers and development files for Lua
 Group:		Development/Other
 Requires:	%{libname} = %{version}-%{release}
 Requires:	%{name} = %{version}-%{release}
+Provides:	liblua%{major}-devel = %{version}-%{release}
 Provides:	lua-devel = %{version}-%{release}
 Provides:	lua%{major}-devel = %{version}-%{release}
 
-%description -n %{devname}
+%description -n %{develname}
 This package contains the headers and development files for Lua.
 
 %package -n	%{staticname}
 Summary:	Static development files for Lua
 Group:		Development/Other
+Provides:	lua-devel-static = %{version}-%{release}
 Provides:	lua-static-devel = %{version}-%{release}
-Requires:	%{devname} = %{version}-%{release}
+Requires:	%{develname} = %{version}-%{release}
 
 %description -n	%{staticname}
 This package contains the static development files for Lua.
 
 %prep
 %setup -q
-%apply_patches
+%patch0 -p1 -b .dynlib
+%patch2 -p1 -b .modules
+mkdir -p etc
+cp %{SOURCE1} ./etc/
+sed -i -e 's/@MAJOR_VERSION@/%{major}/g' ./etc/lua.pc
+sed -i -e 's/@FULL_VERSION@/%{version}/g' ./etc/lua.pc
 
 sed -i -e "s|/usr/local|%{_prefix}|g" Makefile
 sed -i -e "s|/lib|/%{_lib}|g" Makefile
@@ -78,15 +84,13 @@ sed -i -e "s|/man/man1|/share/man/man1|g" Makefile
 sed -i -e "s|\$(V)|%{major}|g" src/Makefile
 
 %build
-%make linux CFLAGS="%{optflags} -fPIC -DLUA_USE_LINUX" CC="%__cc" LD="%__ld"
-sed -i -e "s#/usr/local#%{_prefix}#" etc/lua.pc
-sed -i -e 's/-lreadline -lncurses //g' etc/lua.pc
+sed -i 's/-lncurses/-lncursesw/g' */Makefile*
+%make linux CFLAGS="%{optflags} -fPIC -DLUA_USE_LINUX"
 
 %install
 %makeinstall_std INSTALL_TOP=%{buildroot}%{_prefix} INSTALL_LIB=%{buildroot}%{_libdir} INSTALL_MAN=%{buildroot}%{_mandir}/man1
 install -d %{buildroot}%{_libdir}/lua/%{major}/
 install -d %{buildroot}%{_datadir}/lua/%{major}/
-install -m 644 test/*.lua %{buildroot}%{_datadir}/lua/%{major}/
 
 install -m 755 src/liblua.so.%{major}* %{buildroot}%{_libdir}
 ln -s liblua.so.%{major} %{buildroot}%{_libdir}/liblua.so
@@ -105,21 +109,18 @@ mv %{buildroot}%{_bindir}/luac %{buildroot}%{_bindir}/luac%{major}
 [[ -f %{_bindir}/lua%{major} ]] || /usr/sbin/update-alternatives --remove lua %{_bindir}/lua%{major}
 
 %files
-%doc doc/*.html doc/*.gif
-%doc COPYRIGHT HISTORY INSTALL README
+%doc doc/*{.html,.css,.gif,.png}
+%doc README
 %{_bindir}/*
 %{_mandir}/man1/*
-%dir %{_datadir}/lua
-%{_datadir}/lua/%{major}/*.lua
 
 %files -n %{libname}
 %{_libdir}/liblua.so.%{major}*
 
-%files -n %{devname}
+%files -n %{develname}
 %{_includedir}/*
 %{_libdir}/pkgconfig/*
 %{_libdir}/liblua.so
 
 %files -n %{staticname}
 %{_libdir}/*.a
-
