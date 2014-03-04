@@ -7,14 +7,15 @@
 Summary:	Powerful, light-weight programming language
 Name:		lua
 Version:	5.2.3
-Release:	1
+Release:	2
 License:	MIT
 Group:		Development/Other
 URL:		http://www.lua.org/
 Source0:	http://www.lua.org/ftp/%{name}-%{version}.tar.gz
 Source1:	lua.pc
 Patch0:		lua-5.2.1-dynlib.patch
-Patch2:		lua-5.2.0-modules_path.patch
+Patch1:		lua-5.2.0-modules_path.patch
+Patch2:		lua52-compat-old-versions.patch
 Provides:	lua%{major}
 BuildRequires:	readline-devel
 BuildRequires:	ncurses-devel
@@ -69,8 +70,7 @@ This package contains the static development files for Lua.
 
 %prep
 %setup -q
-%patch0 -p1 -b .dynlib
-%patch2 -p1 -b .modules
+%apply_patches
 mkdir -p etc
 cp %{SOURCE1} ./etc/
 sed -i -e 's/@MAJOR_VERSION@/%{major}/g' ./etc/lua.pc
