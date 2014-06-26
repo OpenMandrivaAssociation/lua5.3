@@ -1,24 +1,24 @@
 %define major 5.2
 %define libname %mklibname %{name} %{major}
-%define develname %mklibname %{name} -d
+%define devname %mklibname %{name} -d
 %define staticname %mklibname %{name} -d -s
 %define alt_priority %(echo %{major} | sed -e 's/[^0-9]//g')
 
 Summary:	Powerful, light-weight programming language
 Name:		lua
 Version:	5.2.3
-Release:	3
+Release:	4
 License:	MIT
 Group:		Development/Other
-URL:		http://www.lua.org/
+Url:		http://www.lua.org/
 Source0:	http://www.lua.org/ftp/%{name}-%{version}.tar.gz
 Source1:	lua.pc
 Patch0:		lua-5.2.1-dynlib.patch
 Patch1:		lua-5.2.0-modules_path.patch
 Patch2:		lua52-compat-old-versions.patch
-Provides:	lua%{major}
+Provides:	lua%{major} = %{EVRD}
 BuildRequires:	readline-devel
-BuildRequires:	ncurses-devel
+BuildRequires:	pkgconfig(ncurses)
 
 %description
 Lua is a programming language originally designed for extending applications,
@@ -30,6 +30,20 @@ management, making it ideal for configuration, scripting, and rapid
 prototyping. Lua is implemented as a small library of C functions, written in
 ANSI C, and compiles unmodified in all known platforms. The implementation
 goals are simplicity, efficiency, portability, and low embedding cost.
+
+%files
+%doc doc/*{.html,.css,.gif,.png}
+%doc README
+%{_bindir}/*
+%{_mandir}/man1/*
+
+%post
+/usr/sbin/update-alternatives --install %{_bindir}/lua lua %{_bindir}/lua%{major} %{alt_priority} --slave %{_bindir}/luac luac %{_bindir}/luac%{major}
+
+%postun
+[[ -f %{_bindir}/lua%{major} ]] || /usr/sbin/update-alternatives --remove lua %{_bindir}/lua%{major}
+
+#----------------------------------------------------------------------------
 
 %package -n %{libname}
 Summary:	Powerful, light-weight programming language
@@ -46,27 +60,44 @@ prototyping. Lua is implemented as a small library of C functions, written in
 ANSI C, and compiles unmodified in all known platforms. The implementation
 goals are simplicity, efficiency, portability, and low embedding cost.
 
-%package -n %{develname}
+%files -n %{libname}
+%{_libdir}/liblua.so.%{major}*
+
+#----------------------------------------------------------------------------
+
+%package -n %{devname}
 Summary:	Headers and development files for Lua
 Group:		Development/Other
-Requires:	%{libname} = %{version}-%{release}
-Requires:	%{name} = %{version}-%{release}
-Provides:	liblua%{major}-devel = %{version}-%{release}
-Provides:	lua-devel = %{version}-%{release}
-Provides:	lua%{major}-devel = %{version}-%{release}
+Requires:	%{libname} = %{EVRD}
+Requires:	%{name} = %{EVRD}
+Provides:	liblua%{major}-devel = %{EVRD}
+Provides:	lua-devel = %{EVRD}
+Provides:	lua%{major}-devel = %{EVRD}
 
-%description -n %{develname}
+%description -n %{devname}
 This package contains the headers and development files for Lua.
 
-%package -n	%{staticname}
+%files -n %{devname}
+%{_includedir}/*
+%{_libdir}/pkgconfig/*
+%{_libdir}/liblua.so
+
+#----------------------------------------------------------------------------
+
+%package -n %{staticname}
 Summary:	Static development files for Lua
 Group:		Development/Other
-Provides:	lua-devel-static = %{version}-%{release}
-Provides:	lua-static-devel = %{version}-%{release}
-Requires:	%{develname} = %{version}-%{release}
+Provides:	lua-devel-static = %{EVRD}
+Provides:	lua-static-devel = %{EVRD}
+Requires:	%{devname} = %{EVRD}
 
-%description -n	%{staticname}
+%description -n %{staticname}
 This package contains the static development files for Lua.
+
+%files -n %{staticname}
+%{_libdir}/*.a
+
+#----------------------------------------------------------------------------
 
 %prep
 %setup -q
@@ -102,25 +133,3 @@ install -m 644 etc/lua.pc %{buildroot}%{_libdir}/pkgconfig/
 mv %{buildroot}%{_bindir}/lua %{buildroot}%{_bindir}/lua%{major}
 mv %{buildroot}%{_bindir}/luac %{buildroot}%{_bindir}/luac%{major}
 
-%post
-/usr/sbin/update-alternatives --install %{_bindir}/lua lua %{_bindir}/lua%{major} %{alt_priority} --slave %{_bindir}/luac luac %{_bindir}/luac%{major}
-
-%postun
-[[ -f %{_bindir}/lua%{major} ]] || /usr/sbin/update-alternatives --remove lua %{_bindir}/lua%{major}
-
-%files
-%doc doc/*{.html,.css,.gif,.png}
-%doc README
-%{_bindir}/*
-%{_mandir}/man1/*
-
-%files -n %{libname}
-%{_libdir}/liblua.so.%{major}*
-
-%files -n %{develname}
-%{_includedir}/*
-%{_libdir}/pkgconfig/*
-%{_libdir}/liblua.so
-
-%files -n %{staticname}
-%{_libdir}/*.a
