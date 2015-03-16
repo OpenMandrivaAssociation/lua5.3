@@ -6,8 +6,8 @@
 
 Summary:	Powerful, light-weight programming language
 Name:		lua
-Version:	5.2.3
-Release:	6
+Version:	5.2.4
+Release:	1
 License:	MIT
 Group:		Development/Other
 Url:		http://www.lua.org/
@@ -116,7 +116,7 @@ sed -i -e "s|\$(V)|%{major}|g" src/Makefile
 
 %build
 sed -i 's/-lncurses/-lncursesw/g' */Makefile*
-%make linux CFLAGS="%{optflags} -fPIC -DLUA_USE_LINUX"
+%make CC=%{__cc} linux CFLAGS="%{optflags} -fPIC -DLUA_USE_LINUX"
 
 %install
 %makeinstall_std INSTALL_TOP=%{buildroot}%{_prefix} INSTALL_LIB=%{buildroot}%{_libdir} INSTALL_MAN=%{buildroot}%{_mandir}/man1
