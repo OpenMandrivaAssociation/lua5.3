@@ -116,7 +116,7 @@ sed -i -e "s|\$(V)|%{major}|g" src/Makefile
 
 %build
 sed -i 's/-lncurses/-lncursesw/g' */Makefile*
-%make CC=%{__cc} linux CFLAGS="%{optflags} -fPIC -DLUA_USE_LINUX"
+%make CC=%{__cc} linux CFLAGS="%{optflags} -fPIC -DLUA_USE_LINUX" MYLDFLAGS="%{ldflags}"
 
 %install
 %makeinstall_std INSTALL_TOP=%{buildroot}%{_prefix} INSTALL_LIB=%{buildroot}%{_libdir} INSTALL_MAN=%{buildroot}%{_mandir}/man1
