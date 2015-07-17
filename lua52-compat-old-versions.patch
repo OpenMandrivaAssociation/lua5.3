@@ -1,13 +1,14 @@
-diff --git a/src/luaconf.h b/src/luaconf.h
-index b7988ef..da78791 100644
---- a/src/luaconf.h
-+++ b/src/luaconf.h
-@@ -242,6 +242,8 @@
+--- lua-5.3.1/src/luaconf.h.0002~	2015-07-16 18:49:32.567567492 +0200
++++ lua-5.3.1/src/luaconf.h	2015-07-17 08:37:26.644707936 +0200
+@@ -286,6 +286,11 @@
  ** ===================================================================
  */
  
-+#define LUA_COMPAT_ALL
++#ifndef LUA_NO_COMPAT
++#define LUA_COMPAT_5_2 1
++#define LUA_COMPAT_5_1 1
++#endif
 +
  /*
- @@ LUA_COMPAT_ALL controls all compatibility options.
- ** You can define it to get all options, or change specific options
+ @@ LUA_COMPAT_5_2 controls other macros for compatibility with Lua 5.2.
+ @@ LUA_COMPAT_5_1 controls other macros for compatibility with Lua 5.1.

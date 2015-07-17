@@ -1,4 +1,4 @@
-%define major 5.2
+%define major 5.3
 %define libname %mklibname %{name} %{major}
 %define devname %mklibname %{name} -d
 %define staticname %mklibname %{name} -d -s
@@ -6,14 +6,14 @@
 
 Summary:	Powerful, light-weight programming language
 Name:		lua
-Version:	5.2.4
+Version:	5.3.1
 Release:	1
 License:	MIT
 Group:		Development/Other
 Url:		http://www.lua.org/
 Source0:	http://www.lua.org/ftp/%{name}-%{version}.tar.gz
 Source1:	lua.pc
-Patch0:		lua-5.2.1-dynlib.patch
+Patch0:		lua-5.3.1-dynlib.patch
 Patch1:		lua-5.2.0-modules_path.patch
 Patch2:		lua52-compat-old-versions.patch
 Provides:	lua%{major} = %{EVRD}
@@ -113,6 +113,7 @@ sed -i -e "s|/usr/local|%{_prefix}|g" src/luaconf.h
 sed -i -e "s|/lib|/%{_lib}|g" src/luaconf.h
 sed -i -e "s|/man/man1|/share/man/man1|g" Makefile
 sed -i -e "s|\$(V)|%{major}|g" src/Makefile
+sed -i -e "s|gcc|%{__cc}|g" src/Makefile
 
 %build
 sed -i 's/-lncurses/-lncursesw/g' */Makefile*
