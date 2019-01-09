@@ -7,7 +7,7 @@
 Summary:	Powerful, light-weight programming language
 Name:		lua
 Version:	5.3.5
-Release:	2
+Release:	3
 License:	MIT
 Group:		Development/Other
 Url:		http://www.lua.org/
@@ -101,8 +101,8 @@ This package contains the static development files for Lua.
 #----------------------------------------------------------------------------
 
 %prep
-%setup -q
-%apply_patches
+%autosetup -p1
+
 mkdir -p etc
 cp %{SOURCE1} ./etc/
 sed -i -e 's/@MAJOR_VERSION@/%{major}/g' ./etc/lua.pc
@@ -119,10 +119,10 @@ sed -i -e "s|gcc|%{__cc}|g" src/Makefile
 %build
 %setup_compile_flags
 sed -i 's/-lncurses/-lncursesw/g' */Makefile*
-%make CC=%{__cc} linux CFLAGS="%{optflags} -fPIC -DLUA_USE_LINUX" MYLDFLAGS="%{ldflags}"
+%make_build CC=%{__cc} linux CFLAGS="%{optflags} -fPIC -DLUA_USE_LINUX" MYLDFLAGS="%{ldflags}"
 
 %install
-%makeinstall_std INSTALL_TOP=%{buildroot}%{_prefix} INSTALL_LIB=%{buildroot}%{_libdir} INSTALL_MAN=%{buildroot}%{_mandir}/man1
+%make_install INSTALL_TOP=%{buildroot}%{_prefix} INSTALL_LIB=%{buildroot}%{_libdir} INSTALL_MAN=%{buildroot}%{_mandir}/man1
 install -d %{buildroot}%{_libdir}/lua/%{major}/
 install -d %{buildroot}%{_datadir}/lua/%{major}/
 
@@ -135,4 +135,3 @@ install -m 644 etc/lua.pc %{buildroot}%{_libdir}/pkgconfig/
 # for update-alternatives
 mv %{buildroot}%{_bindir}/lua %{buildroot}%{_bindir}/lua%{major}
 mv %{buildroot}%{_bindir}/luac %{buildroot}%{_bindir}/luac%{major}
-
