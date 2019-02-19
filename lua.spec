@@ -42,7 +42,7 @@ goals are simplicity, efficiency, portability, and low embedding cost.
 /usr/sbin/update-alternatives --install %{_bindir}/lua lua %{_bindir}/lua%{major} %{alt_priority} --slave %{_bindir}/luac luac %{_bindir}/luac%{major}
 
 %postun
-[[ -f %{_bindir}/lua%{major} ]] || /usr/sbin/update-alternatives --remove lua %{_bindir}/lua%{major}
+[ -f %{_bindir}/lua%{major} ] || /usr/sbin/update-alternatives --remove lua %{_bindir}/lua%{major}
 
 #----------------------------------------------------------------------------
 
