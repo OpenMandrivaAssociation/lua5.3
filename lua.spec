@@ -4,10 +4,13 @@
 %define staticname %mklibname %{name} -d -s
 %define alt_priority %(echo %{major} | sed -e 's/[^0-9]//g')
 
+# (tpg) enable PGO build
+%bcond_without pgo
+
 Summary:	Powerful, light-weight programming language
 Name:		lua
 Version:	5.3.5
-Release:	3
+Release:	4
 License:	MIT
 Group:		Development/Other
 Url:		http://www.lua.org/
@@ -16,6 +19,8 @@ Source1:	lua.pc
 Patch0:		lua-5.3.1-dynlib.patch
 Patch1:		lua-5.2.0-modules_path.patch
 Patch2:		lua52-compat-old-versions.patch
+Patch3:		0001-Add-scimark-as-PGO-profiling-workload.patch
+Patch4:		0001-Add-option-for-pgo-profiling-test-with-scimark.patch
 Provides:	lua%{major} = %{EVRD}
 BuildRequires:	readline-devel
 BuildRequires:	pkgconfig(ncursesw)
@@ -119,7 +124,26 @@ sed -i -e "s|gcc|%{__cc}|g" src/Makefile
 %build
 %setup_compile_flags
 sed -i 's/-lncurses/-lncursesw/g' */Makefile*
-%make_build CC=%{__cc} linux CFLAGS="%{optflags} -fPIC -DLUA_USE_LINUX" MYLDFLAGS="%{ldflags}"
+
+%if %{with pgo}
+CFLAGS_PGO="%{optflags} -fprofile-instr-generate"
+CXXFLAGS_PGO="%{optflags} -fprofile-instr-generate"
+FFLAGS_PGO="$CFLAGS_PGO"
+FCFLAGS_PGO="$CFLAGS_PGO"
+LDFLAGS_PGO="%{ldflags} -fprofile-instr-generate"
+export LLVM_PROFILE_FILE=%{name}-%p.profile.d
+export LD_LIBRARY_PATH="$(pwd)"
+make test_pgo CC=%{__cc} linux CFLAGS="${CFLAGS_PGO} -fPIC -DLUA_USE_LINUX" MYLDFLAGS="${LDFLAGS_PGO}"
+unset LD_LIBRARY_PATH
+unset LLVM_PROFILE_FILE
+llvm-profdata merge --output=%{name}.profile *.profile.d
+rm -f *.profile.d
+make clean
+CFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
+CXXFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
+LDFLAGS="%{ldflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
+%endif
+%make_build CC=%{__cc} linux CFLAGS="${CFLAGS} -fPIC -DLUA_USE_LINUX" MYLDFLAGS="${LDFLAGS}"
 
 %install
 %make_install INSTALL_TOP=%{buildroot}%{_prefix} INSTALL_LIB=%{buildroot}%{_libdir} INSTALL_MAN=%{buildroot}%{_mandir}/man1
