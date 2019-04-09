@@ -1,0 +1,35 @@
+From d453f1df8ea82911c9aa23d768e207f1c23e903b Mon Sep 17 00:00:00 2001
+From: Guobing Chen <guobing.chen@intel.com>
+Date: Wed, 3 Apr 2019 13:47:39 +0800
+Subject: [PATCH] Add option for pgo profiling test with scimark
+
+Signed-off-by: Guobing Chen <guobing.chen@intel.com>
+---
+ Makefile | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/Makefile b/Makefile
+index 2629841..df5eeb9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -61,6 +61,9 @@ $(PLATS) clean: pc
+ test:	dummy
+ 	src/lua -v
+ 
++test_pgo:      dummy
++	src/lua scimark.lua
++
+ install: dummy
+ 	cd src && $(MKDIR) $(INSTALL_BIN) $(INSTALL_INC) $(INSTALL_LIB) $(INSTALL_MAN) $(INSTALL_LMOD) $(INSTALL_CMOD) $(INSTALL_PC)
+ 	cd src && $(INSTALL_EXEC) $(TO_BIN) $(INSTALL_BIN)
+@@ -117,6 +120,6 @@ pc:
+ 	sed -i s%##R##%$(R)% src/$(TO_PC)
+ 
+ # list targets that do not create files (but not all makes understand .PHONY)
+-.PHONY: all $(PLATS) clean test install local none dummy echo pecho lecho
++.PHONY: all $(PLATS) clean test test_pgo install local none dummy echo pecho lecho
+ 
+ # (end of Makefile)
+-- 
+2.20.1
+
