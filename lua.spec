@@ -133,6 +133,7 @@ FCFLAGS_PGO="$CFLAGS_PGO"
 LDFLAGS_PGO="%{ldflags} -fprofile-instr-generate"
 export LLVM_PROFILE_FILE=%{name}-%p.profile.d
 export LD_LIBRARY_PATH="$(pwd)"
+%make_build CC=%{__cc} linux CFLAGS="${CFLAGS_PGO} -fPIC -DLUA_USE_LINUX" MYLDFLAGS="${LDFLAGS_PGO}"
 make test_pgo CC=%{__cc} linux CFLAGS="${CFLAGS_PGO} -fPIC -DLUA_USE_LINUX" MYLDFLAGS="${LDFLAGS_PGO}"
 unset LD_LIBRARY_PATH
 unset LLVM_PROFILE_FILE
