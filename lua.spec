@@ -140,9 +140,9 @@ unset LLVM_PROFILE_FILE
 llvm-profdata merge --output=%{name}.profile *.profile.d
 rm -f *.profile.d
 make clean
-CFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
-CXXFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
-LDFLAGS="%{ldflags} -fprofile-instr-use=$(realpath %{name}.profile)" \
+export CFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)"
+export CXXFLAGS="%{optflags} -fprofile-instr-use=$(realpath %{name}.profile)"
+export LDFLAGS="%{ldflags} -fprofile-instr-use=$(realpath %{name}.profile)"
 %endif
 %make_build CC=%{__cc} linux CFLAGS="${CFLAGS} -fPIC -DLUA_USE_LINUX" MYLDFLAGS="${LDFLAGS}"
 
