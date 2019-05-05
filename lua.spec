@@ -5,7 +5,11 @@
 %define alt_priority %(echo %{major} | sed -e 's/[^0-9]//g')
 
 # (tpg) enable PGO build
+%ifnarch riscv64
 %bcond_without pgo
+%else
+%bcond_with pgo
+%endif
 
 Summary:	Powerful, light-weight programming language
 Name:		lua
