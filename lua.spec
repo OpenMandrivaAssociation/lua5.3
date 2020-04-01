@@ -14,7 +14,7 @@
 Summary:	Powerful, light-weight programming language
 Name:		lua
 Version:	5.3.5
-Release:	5
+Release:	6
 License:	MIT
 Group:		Development/Other
 Url:		http://www.lua.org/
@@ -26,7 +26,7 @@ Patch2:		lua52-compat-old-versions.patch
 Patch3:		0001-Add-scimark-as-PGO-profiling-workload.patch
 Patch4:		0001-Add-option-for-pgo-profiling-test-with-scimark.patch
 Provides:	lua%{major} = %{EVRD}
-BuildRequires:	readline-devel
+BuildRequires:	pkgconfig(readline)
 BuildRequires:	pkgconfig(ncursesw)
 Requires(post,postun):	chkconfig
 
