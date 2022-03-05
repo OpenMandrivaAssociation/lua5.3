@@ -11,21 +11,20 @@
 %bcond_with pgo
 %endif
 
-Summary:	Powerful, light-weight programming language
-Name:		lua
+Summary:	Powerful, light-weight programming language (old version)
+Name:		lua5.3
 Version:	5.3.6
 Release:	1
 License:	MIT
 Group:		Development/Other
 Url:		http://www.lua.org/
-Source0:	http://www.lua.org/ftp/%{name}-%{version}.tar.gz
+Source0:	http://www.lua.org/ftp/lua-%{version}.tar.gz
 Source1:	lua.pc
 Patch0:		lua-5.3.1-dynlib.patch
 Patch1:		lua-5.2.0-modules_path.patch
 Patch2:		lua52-compat-old-versions.patch
 Patch3:		0001-Add-scimark-as-PGO-profiling-workload.patch
 Patch4:		0001-Add-option-for-pgo-profiling-test-with-scimark.patch
-Provides:	lua%{major} = %{EVRD}
 BuildRequires:	pkgconfig(readline)
 BuildRequires:	pkgconfig(ncursesw)
 Requires(post,postun):	chkconfig
@@ -56,7 +55,7 @@ goals are simplicity, efficiency, portability, and low embedding cost.
 #----------------------------------------------------------------------------
 
 %package -n %{libname}
-Summary:	Powerful, light-weight programming language
+Summary:	Powerful, light-weight programming language (old version)
 Group:		Development/Other
 
 %description -n %{libname}
@@ -76,7 +75,7 @@ goals are simplicity, efficiency, portability, and low embedding cost.
 #----------------------------------------------------------------------------
 
 %package -n %{devname}
-Summary:	Headers and development files for Lua
+Summary:	Headers and development files for Lua (old version)
 Group:		Development/Other
 Requires:	%{libname} = %{EVRD}
 Requires:	%{name} = %{EVRD}
@@ -95,7 +94,7 @@ This package contains the headers and development files for Lua.
 #----------------------------------------------------------------------------
 
 %package -n %{staticname}
-Summary:	Static development files for Lua
+Summary:	Static development files for Lua (old version)
 Group:		Development/Other
 Provides:	lua-devel-static = %{EVRD}
 Provides:	lua-static-devel = %{EVRD}
@@ -110,7 +109,7 @@ This package contains the static development files for Lua.
 #----------------------------------------------------------------------------
 
 %prep
-%autosetup -p1
+%autosetup -p1 -n lua-%{version}
 
 mkdir -p etc
 cp %{SOURCE1} ./etc/
