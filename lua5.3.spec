@@ -17,7 +17,7 @@ Version:	5.3.6
 Release:	2
 License:	MIT
 Group:		Development/Other
-Url:		http://www.lua.org/
+Url:		https://www.lua.org/
 Source0:	http://www.lua.org/ftp/lua-%{version}.tar.gz
 Source1:	lua.pc
 Patch0:		lua-5.3.1-dynlib.patch
