@@ -25,6 +25,7 @@ Patch1:		lua-5.2.0-modules_path.patch
 Patch2:		lua52-compat-old-versions.patch
 Patch3:		0001-Add-scimark-as-PGO-profiling-workload.patch
 Patch4:		0001-Add-option-for-pgo-profiling-test-with-scimark.patch
+BuildRequires:	make
 BuildRequires:	pkgconfig(readline)
 BuildRequires:	pkgconfig(ncursesw)
 Requires(post,postun):	chkconfig
